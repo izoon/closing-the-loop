@@ -12,7 +12,7 @@ Quality does not come from getting it right the first time. It comes from shrink
 
 With AI IDEs like Cursor, my teams merge more code per week than ever. Tickets close, demos go green, and the burndown looks healthy. Yet the platform is not proportionally closer to done.
 
-The tools are not the problem. They raise output faster than they raise evidence. On one migration I mapped, about 280 tickets were tracked and 63% were closed. None of the 46 packages that actually defined delivery had started.
+The tools are not the problem. They raise output faster than they raise evidence. In my experience leading platform migrations, it is common to find most tickets closed while the work packages that actually define delivery have barely started.
 
 That gap between reported progress and real progress is what this article is about, and how to close it.
 
@@ -120,18 +120,18 @@ Propagated to the gap ($\hat{\varepsilon}$ increases with $\delta$):
 \hat{\varepsilon}_k \in \Big[\, r - y_k\,(1-\hat{\delta}_L),\;\; r - y_k\,(1-\hat{\delta}_U) \,\Big]
 ```
 
-Worked example: $y = 0.63$, $n = 20$, $f = 6$, $u = 0$.
+Worked example: $y = 0.60$, $n = 20$, $f = 6$, $u = 0$.
 
 | Quantity | Computation | Value |
 | --- | --- | --- |
-| Reported gap | 1 − 0.63 | 0.370 |
+| Reported gap | 1 − 0.60 | 0.400 |
 | $\hat{\delta}$ | 6 / 20 | 0.300 |
 | 95% interval for $\delta$ | Wilson, $m = 20$ | [0.146, 0.519] |
-| AI margin | 0.63 × 0.30 | 0.189 |
-| True progress $y^{*}$ | 0.63 × 0.70 | 0.441, interval [0.303, 0.538] |
-| Corrected gap $\hat{\varepsilon}$ | 1 − 0.441 | 0.559, interval [0.462, 0.697] |
+| AI margin | 0.60 × 0.30 | 0.180 |
+| True progress $y^{*}$ | 0.60 × 0.70 | 0.420, interval [0.289, 0.513] |
+| Corrected gap $\hat{\varepsilon}$ | 1 − 0.420 | 0.580, interval [0.487, 0.711] |
 
-The tracker says 37% remains. The corrected gap says 56%, and plausibly up to 70%.
+The tracker says 40% remains. The corrected gap says 58%, and plausibly up to 71%.
 
 ### 3. Sizing the audit
 
@@ -202,9 +202,9 @@ Corrections needed to reach $\tau$ at a constant ratio, and the ratio required t
 k^{*} = \left\lceil \frac{\ln\!\left(\tau / \hat{\varepsilon}_0\right)}{\ln \rho} \right\rceil, \qquad \rho_{\text{req}} = \left(\frac{\tau}{\hat{\varepsilon}_0}\right)^{1/K}
 ```
 
-Worked example: $\hat{\varepsilon}_0 = 0.559$, $\hat{\varepsilon}_1 = 0.42$, so $\rho = 0.75$. With $\tau = 0.05$, $k^{*} = \lceil \ln(0.0894)/\ln(0.75) \rceil = \lceil 8.44 \rceil = 9$ corrections.
+Worked example: $\hat{\varepsilon}_0 = 0.580$, $\hat{\varepsilon}_1 = 0.435$, so $\rho = 0.75$. With $\tau = 0.05$, $k^{*} = \lceil \ln(0.0862)/\ln(0.75) \rceil = \lceil 8.52 \rceil = 9$ corrections.
 
-With only $K = 3$ corrections scheduled, $\rho_{\text{req}} = (0.05/0.559)^{1/3} = 0.45$. Every correction must remove more than half of the remaining gap. Computed at the first correction point, this tells you early that either the controller or the scope has to change.
+With only $K = 3$ corrections scheduled, $\rho_{\text{req}} = (0.05/0.580)^{1/3} = 0.44$. Every correction must remove more than half of the remaining gap. Computed at the first correction point, this tells you early that either the controller or the scope has to change.
 
 ### 6. Reliability growth: why a growing gap indicts the process
 
@@ -240,13 +240,13 @@ Predict, then update:
 K_k = \frac{P^{-}_k}{P^{-}_k + R_k}, \qquad \hat{x}_k = \hat{x}^{-}_k + K_k\,\big(z_k - \hat{x}^{-}_k\big), \qquad P_k = (1 - K_k)\,P^{-}_k
 ```
 
-$R_k$ is large for a weekly reading and small in an audit week. Worked example: $\hat{x}_0 = 0.44$, $P_0 = 0.0049$, $Q = 0.0004$, planned $u = 0.02$ per week, weekly $R = 0.0036$, audit $R = 0.0009$.
+$R_k$ is large for a weekly reading and small in an audit week. Worked example: $\hat{x}_0 = 0.42$, $P_0 = 0.0049$, $Q = 0.0004$, planned $u = 0.02$ per week, weekly $R = 0.0036$, audit $R = 0.0009$.
 
 | Week | Reading $z$ | $R$ | Gain $K$ | Estimate $\hat{x}$ | Std. dev. $\sqrt{P}$ |
 | --- | --- | --- | --- | --- | --- |
-| 1 | 0.47 | 0.0036 | 0.60 | 0.466 | 0.046 |
-| 2 | 0.49 | 0.0036 | 0.41 | 0.488 | 0.039 |
-| 3 (audit) | 0.50 | 0.0009 | 0.68 | 0.503 | 0.025 |
+| 1 | 0.45 | 0.0036 | 0.60 | 0.446 | 0.046 |
+| 2 | 0.47 | 0.0036 | 0.41 | 0.468 | 0.039 |
+| 3 (audit) | 0.48 | 0.0009 | 0.68 | 0.483 | 0.025 |
 
 The audit week gets the highest gain and cuts the uncertainty most. [Kim and Reinschmidt (2010)](https://pure.psu.edu/en/publications/probabilistic-forecasting-of-project-duration-using-kalman-filter/) applied the same filter to earned-value forecasting.
 
@@ -295,7 +295,7 @@ The loop runs on two time scales over the same software. Mixing them up is a com
 | Course correction | Monthly, on fixed dates | Accountable technical leader | Re-measure the corrected gap, make the calls, publish the next design and its tests |
 | Acceptance | Once, at the end | Accountable technical leader | Run the frozen test set. Accept or reject against an agreed tolerance. No new design |
 
-On the migration above, that meant three correction points a month apart, then final acceptance. Anything outside tolerance at the end becomes a deferred item with a written policy. Nothing quietly disappears from scope.
+In practice, I have found three correction points a month apart, then final acceptance, to be a workable rhythm. Anything outside tolerance at the end becomes a deferred item with a written policy. Nothing quietly disappears from scope.
 
 ## When the gap grows, change the controller, not the gain
 
@@ -305,18 +305,16 @@ The rule is simple. If the gap grew after a correction, change the controller be
 
 One exception does not wait for the next correction point. Irreversible actions, such as switching a production data path or migrating customer money, need interlocks that act continuously. A monthly review that finds an irreversible mistake is too late.
 
-## What it looked like on a real migration
+## What it looks like in practice
 
-The context was a platform migration done strangler-style, with billing totals, policy status and generated documents shared across many screens. The team used AI IDEs heavily. At the baseline measurement:
+In my experience leading platform migrations done strangler-style, with billing totals, status and generated documents shared across many screens, and with teams using AI IDEs heavily, the baseline measurement tends to show the same pattern:
 
-- About 280 tickets were tracked and 63% were closed. On a dashboard, that reads as two-thirds done.
-- All 46 packages that defined delivery were still unstarted.
-- The new data layer was merged in several waves, all switched off. No data type had yet been cut over, soaked and rolled back.
-- A critical bug showed customers a different total on two screens. That is exactly the multi-screen disagreement vertical tests are built to catch.
+- Most tickets are closed, so the dashboard reads as mostly done.
+- Few, if any, of the work packages that define delivery have started.
+- New components are merged but switched off. Nothing has yet been cut over, soaked and rolled back.
+- At least one serious bug shows customers different numbers on two screens. That is exactly the multi-screen disagreement vertical tests are built to catch.
 
-The loop reframed the program in its first weeks. Ticket closure became a footnote and per-area evidence became the measure. The first set of vertical tests was built before the first correction point, so it could serve as the baseline. Switching on the new data layer in production was gated behind a non-production pilot and a timed rollback drill.
-
-Results from the correction points themselves will be the subject of a follow-up.
+Applying the loop reframes a program within weeks. Ticket closure becomes a footnote and per-area evidence becomes the measure. The first set of vertical tests is built before the first correction point, so it can serve as the baseline. Irreversible switches, such as turning on a new data path in production, are gated behind a non-production pilot and a timed rollback drill.
 
 ## How to start next week
 
@@ -334,3 +332,7 @@ Results from the correction points themselves will be the subject of a follow-up
 AI IDEs raise the rate of change. Quality depends on whether your evidence keeps up with it.
 
 The loop does not ask you to be right the first time. It asks for an honest measure, a named bias, and the discipline to correct on schedule. Ship each design together with the test that will judge it, and the gap closes pass by pass.
+
+## License
+
+© 2026 V Salami. This article, including its text, equations and figures, is licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). You may share and adapt it for any purpose, including commercially, provided you give appropriate credit, link to the license and indicate if changes were made.
